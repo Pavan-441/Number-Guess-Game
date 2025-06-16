@@ -11,11 +11,19 @@ const reset = document.getElementById('reset');
 
 guessSubmit.addEventListener('click', () => {
     const userGuess = Number(guessInput.value);
-    attempts++;
 
+    if(guessInput.value.trim() === ''){
+        message.textContent = 'Please enter any number between 1 and 100';
+        return;
+    }
     if(userGuess < 1 || userGuess > 100){
         message.textContent = 'Please enter the valid number';
-    }else if(userGuess < randomNumber){
+        return;
+    }
+
+    attempts++;
+
+    if(userGuess < randomNumber){
         message.textContent = '📉 Too low';
     }else if(userGuess > randomNumber){
         message.textContent = '📈 Too high';
@@ -37,7 +45,15 @@ guessSubmit.addEventListener('click', () => {
 
 });
 
+guessInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+        guessSubmit.click();
+    }
+});
+
+
 reset.addEventListener('click', () => {
+    randomNumber = Math.floor(Math.random() * 100) + 1;
     attempts = 0;
     message.textContent = '';
     guessInput.disabled = false;
@@ -47,4 +63,8 @@ reset.addEventListener('click', () => {
     showAttempts.textContent = `Attempts: ${attempts}`;
 });
 
-
+document.addEventListener('keydown', (event)=> {
+    if (event.key === 'Escape'){
+        reset.click();
+    }
+}); 
